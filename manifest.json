@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "AI Chat Companion",
+  "version": "1.0",
+  "description": "Split screen view for Deepseek and Grok with synchronized input",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": [
+    "https://chat.deepseek.com/*",
+    "https://grok.com/*",
+    "chrome-extension://*"
+  ],
+  "action": {
+    "default_title": "AI Chat Companion"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chat.deepseek.com/*",
+        "https://grok.com/*"
+      ],
+      "js": ["content.js"],
+      "all_frames": true,
+      "match_about_blank": true,
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["split.html", "inject.js"],
+    "matches": [
+      "https://chat.deepseek.com/*",
+      "https://grok.com/*",
+      "chrome-extension://*/*"
+    ]
+  }],
+  "declarative_net_request": {
+    "rule_resources": [{
+      "id": "ruleset_1",
+      "enabled": true,
+      "path": "rules.json"
+    }]
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; frame-src 'self' https://chat.deepseek.com https://grok.com"
+  }
+} 

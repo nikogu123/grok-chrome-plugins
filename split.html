@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Chat Companion</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+    }
+    .chat-window {
+      flex: 1;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <iframe 
+      id="deepseek" 
+      class="chat-window" 
+      src="https://chat.deepseek.com/"
+    ></iframe>
+    <iframe 
+      id="grok" 
+      class="chat-window" 
+      src="https://grok.com/"
+    ></iframe>
+  </div>
+  <script src="content.js"></script>
+</body>
+</html> 
