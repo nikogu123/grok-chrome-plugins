@@ -8,7 +8,7 @@
         {
           "header": "content-security-policy",
           "operation": "set",
-          "value": "frame-ancestors 'self' chrome-extension://* https://* http://*; script-src 'self' 'unsafe-inline' 'unsafe-eval' chrome-extension://*"
+          "value": "frame-ancestors 'self' chrome-extension://* https://* http://*; script-src 'self' 'unsafe-inline' 'unsafe-eval' chrome-extension://* https://*.doubao.com"
         },
         {
           "header": "x-frame-options",
@@ -30,7 +30,7 @@
         {
           "header": "content-security-policy",
           "operation": "set",
-          "value": "frame-ancestors 'self' chrome-extension://* https://* http://*; script-src 'self' 'unsafe-inline' 'unsafe-eval' chrome-extension://*"
+          "value": "frame-ancestors 'self' chrome-extension://* https://* http://*; script-src 'self' 'unsafe-inline' 'unsafe-eval' chrome-extension://* https://*.doubao.com"
         },
         {
           "header": "x-frame-options",
@@ -40,6 +40,28 @@
     },
     "condition": {
       "urlFilter": "*://grok.com/*",
+      "resourceTypes": ["main_frame", "sub_frame"]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "content-security-policy",
+          "operation": "set",
+          "value": "frame-ancestors 'self' chrome-extension://* https://* http://*; script-src 'self' 'unsafe-inline' 'unsafe-eval' chrome-extension://* https://*.doubao.com"
+        },
+        {
+          "header": "x-frame-options",
+          "operation": "remove"
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "*://www.doubao.com/*",
       "resourceTypes": ["main_frame", "sub_frame"]
     }
   }

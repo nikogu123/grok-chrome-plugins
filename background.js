@@ -9,7 +9,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('Background received message:', message);
   
-  if (message.type === 'GROK_INPUT' || message.type === 'GROK_ENTER') {
+  if (message.type === 'SYNC_INPUT' || message.type === 'SYNC_ENTER') {
     // 广播消息到所有content scripts
     chrome.tabs.query({}, (tabs) => {
       tabs.forEach(tab => {

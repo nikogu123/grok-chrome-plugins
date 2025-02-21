@@ -13,6 +13,7 @@
   "host_permissions": [
     "https://chat.deepseek.com/*",
     "https://grok.com/*",
+    "https://www.doubao.com/*",
     "chrome-extension://*"
   ],
   "action": {
@@ -25,7 +26,8 @@
     {
       "matches": [
         "https://chat.deepseek.com/*",
-        "https://grok.com/*"
+        "https://grok.com/*",
+        "https://www.doubao.com/*"
       ],
       "js": ["content.js"],
       "all_frames": true,
@@ -34,10 +36,11 @@
     }
   ],
   "web_accessible_resources": [{
-    "resources": ["split.html", "inject.js"],
+    "resources": ["split.html", "inject.js", "sites.js"],
     "matches": [
       "https://chat.deepseek.com/*",
       "https://grok.com/*",
+      "https://www.doubao.com/*",
       "chrome-extension://*/*"
     ]
   }],
@@ -49,6 +52,6 @@
     }]
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; frame-src 'self' https://chat.deepseek.com https://grok.com"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; frame-src 'self' https://chat.deepseek.com https://grok.com https://www.doubao.com"
   }
 } 
