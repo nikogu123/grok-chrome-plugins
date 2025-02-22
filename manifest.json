@@ -20,6 +20,8 @@
     "https://chat.deepseek.com/*",
     "https://grok.com/*",
     "https://www.doubao.com/*",
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*",
     "chrome-extension://*"
   ],
   "action": {
@@ -39,7 +41,9 @@
       "matches": [
         "https://chat.deepseek.com/*",
         "https://grok.com/*",
-        "https://www.doubao.com/*"
+        "https://www.doubao.com/*",
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*"
       ],
       "js": ["content.js"],
       "all_frames": true,
@@ -53,6 +57,8 @@
       "https://chat.deepseek.com/*",
       "https://grok.com/*",
       "https://www.doubao.com/*",
+      "https://chat.openai.com/*",
+      "https://chatgpt.com/*",
       "chrome-extension://*/*"
     ]
   }],
@@ -64,6 +70,6 @@
     }]
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; frame-src 'self' https://chat.deepseek.com https://grok.com https://www.doubao.com"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; frame-src 'self' https://chat.deepseek.com https://grok.com https://www.doubao.com https://chat.openai.com https://chatgpt.com"
   }
 } 

@@ -4,7 +4,7 @@ window.AI_SITES = {
     id: 'grok',
     urlMatch: 'grok.com',
     inputSelector: 'textarea',
-    inputIndex: 0,  // 第一个匹配的元素
+    inputIndex: 0,
   },
   deepseek: {
     id: 'deepseek',
@@ -17,14 +17,24 @@ window.AI_SITES = {
     urlMatch: 'doubao.com',
     inputSelector: '[data-testid="chat_input_input"]',
     inputIndex: 0,
+  },
+  chatgpt: {
+    id: 'chatgpt',
+    urlMatch: ['chat.openai.com', 'chatgpt.com'],
+    inputSelector: '#prompt-textarea',
+    inputIndex: 0,
   }
 };
 
 // 源网站配置（用于发送消息的网站）
-window.SOURCE_SITE = window.AI_SITES.grok;
+window.SOURCE_SITE = window.AI_SITES.chatgpt;
 
 // 目标网站配置（接收消息的网站）
-window.TARGET_SITES = [window.AI_SITES.deepseek, window.AI_SITES.doubao]; 
+window.TARGET_SITES = [
+  window.AI_SITES.deepseek,
+  window.AI_SITES.doubao,
+  window.AI_SITES.chatgpt
+]; 
 
 
 // 检查当前是否在split.html页面中
@@ -61,9 +71,12 @@ if (window.location.href.includes(chrome.runtime.getURL('split.html'))) {
   });
 } else {
   // 获取当前网站配置
-  const currentSite = Object.values(window.AI_SITES).find(site => 
-    window.location.href.includes(site.urlMatch)
-  );
+  const currentSite = Object.values(window.AI_SITES).find(site => {
+    const matches = Array.isArray(site.urlMatch) 
+      ? site.urlMatch 
+      : [site.urlMatch];
+    return matches.some(match => window.location.href.includes(match));
+  });
 
   if (currentSite) {
     console.log(`${currentSite.id} page initialized`);
@@ -75,10 +88,10 @@ if (window.location.href.includes(chrome.runtime.getURL('split.html'))) {
         if (e.target.matches(currentSite.inputSelector)) {
           const inputs = document.querySelectorAll(currentSite.inputSelector);
           if (inputs[currentSite.inputIndex] === e.target) {
-            console.log(`${currentSite.id} input detected:`, e.target.value);
+            console.log(`${currentSite.id} input detected:`, e.target.value || e.target.innerText);
             chrome.runtime.sendMessage({
               type: 'SYNC_INPUT',
-              text: e.target.value
+              text: e.target.value || e.target.innerText
             });
           }
         }
@@ -86,12 +99,16 @@ if (window.location.href.includes(chrome.runtime.getURL('split.html'))) {
 
       // 监听回车事件
       document.addEventListener('keydown', (e) => {
-        if (e.target.matches(currentSite.inputSelector) && e.key === 'Enter' && !e.shiftKey) {
+        if (e.target.matches(currentSite.inputSelector) && 
+            e.key === 'Enter' && 
+            !e.shiftKey && 
+            (e.metaKey || !e.metaKey)) { // 支持普通回车和 Command + Enter
           const inputs = document.querySelectorAll(currentSite.inputSelector);
           if (inputs[currentSite.inputIndex] === e.target) {
-            console.log(`${currentSite.id} enter pressed`);
+            console.log(`${currentSite.id} enter pressed (cmd: ${e.metaKey})`);
             chrome.runtime.sendMessage({
-              type: 'SYNC_ENTER'
+              type: 'SYNC_ENTER',
+              withCommand: e.metaKey // 传递是否按下 Command 键的信息
             });
           }
         }
@@ -103,17 +120,18 @@ if (window.location.href.includes(chrome.runtime.getURL('split.html'))) {
         const inputElement = document.querySelector(currentSite.inputSelector);
 
         if (message.type === 'SYNC_INPUT' && inputElement) {
-          console.log(`Updating ${currentSite.id} input:`, message.text);
+          console.log(`Updating ${currentSite.id} input:`, message.text, inputElement);
           inputElement.value = message.text;
           inputElement.dispatchEvent(new Event('input', { bubbles: true }));
         } 
         else if (message.type === 'SYNC_ENTER' && inputElement) {
-          console.log(`Simulating enter press in ${currentSite.id}`);
+          console.log(`Simulating enter press in ${currentSite.id} (cmd: ${message.withCommand})`);
           const enterEvent = new KeyboardEvent('keydown', {
             key: 'Enter',
             code: 'Enter',
             keyCode: 13,
             which: 13,
+            metaKey: message.withCommand, // 设置 metaKey 状态
             bubbles: true,
             cancelable: true
           });

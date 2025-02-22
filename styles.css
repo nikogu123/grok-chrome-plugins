@@ -3,13 +3,19 @@ body {
   padding: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .container {
   display: flex;
   width: 100%;
   height: 100%;
+}
+
+.container-2 {
+  width: 100%;
+  height: 100vh;
 }
 
 .frame-container {
